@@ -31,7 +31,7 @@ def require_dual_auth(f):
     @wraps(f)
     def wrapper(*args, **kwargs):
         auth_header = request.headers.get("Authorization", "")
-        user_key = request.headers.get("user_key", "")
+        user_key = request.headers.get("user-key", "")
 
         basic_ok = check_basic_auth(auth_header)
         key_ok = user_key == VALID_API_KEY
