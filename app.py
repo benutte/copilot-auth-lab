@@ -86,11 +86,11 @@ def check_basic_auth(auth_header: str) -> bool:
 
 
 def require_dual_auth(f):
-    """Exige, ao mesmo tempo, Basic Auth válido E o header user_key correto."""
+    """Exige, ao mesmo tempo, Basic Auth válido E o header user-key correto."""
     @wraps(f)
     def wrapper(*args, **kwargs):
         auth_header = request.headers.get("Authorization", "")
-        user_key = request.headers.get("user_key", "")
+        user_key = request.headers.get("user-key", "")
 
         basic_ok = check_basic_auth(auth_header)
         key_ok = user_key == VALID_API_KEY
@@ -98,7 +98,7 @@ def require_dual_auth(f):
         if not basic_ok and not key_ok:
             return jsonify({
                 "error": "unauthorized",
-                "message": "Faltam Basic Auth (Authorization) e o header user_key."
+                "message": "Faltam Basic Auth (Authorization) e o header user-key."
             }), 401
 
         if not basic_ok:
@@ -110,7 +110,7 @@ def require_dual_auth(f):
         if not key_ok:
             return jsonify({
                 "error": "unauthorized",
-                "message": "Header 'user_key' ausente ou inválido."
+                "message": "Header 'user-key' ausente ou inválido."
             }), 401
 
         return f(*args, **kwargs)
@@ -122,7 +122,7 @@ def root():
     return jsonify({
         "service": "copilot-auth-lab",
         "status": "online",
-        "docs": "Use GET /data com Basic Auth + header user_key.",
+        "docs": "Use GET /data com Basic Auth + header user-key.",
     })
 
 
@@ -133,7 +133,7 @@ def get_data():
     query_params = request.args.to_dict()
 
     return jsonify({
-        "message": "Autenticado com sucesso (Basic Auth + user_key).",
+        "message": "Autenticado com sucesso (Basic Auth + user-key).",
         "authenticated_user": VALID_USERNAME,
         "query_params_received": query_params,
         "sample_data": [
